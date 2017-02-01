@@ -1,0 +1,16 @@
+set_global_assignment -entity "PLL1" -library "PLL1" -name IP_TOOL_NAME "Qsys"
+set_global_assignment -entity "PLL1" -library "PLL1" -name IP_TOOL_VERSION "13.1"
+set_global_assignment -entity "PLL1" -library "PLL1" -name IP_TOOL_ENV "Qsys"
+set_global_assignment -library "PLL1" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../PLL1.sopcinfo"]
+set_global_assignment -entity "PLL1" -library "PLL1" -name SLD_INFO "QSYS_NAME PLL1 HAS_SOPCINFO 1 GENERATION_ID 1485802993"
+set_global_assignment -library "PLL1" -name MISC_FILE [file join $::quartus(qip_path) "../../PLL1.cmp"]
+set_global_assignment -library "PLL1" -name SLD_FILE [file join $::quartus(qip_path) "PLL1.debuginfo"]
+set_global_assignment -name SYNTHESIS_ONLY_QIP ON
+set_global_assignment -library "PLL1" -name MISC_FILE [file join $::quartus(qip_path) "../../PLL1.qsys"]
+
+set_global_assignment -library "PLL1" -name VERILOG_FILE [file join $::quartus(qip_path) "PLL1.v"]
+set_global_assignment -library "PLL1" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/PLL1_altpll_0.v"]
+
+set_global_assignment -entity "PLL1_altpll_0" -library "PLL1" -name IP_TOOL_NAME "altpll"
+set_global_assignment -entity "PLL1_altpll_0" -library "PLL1" -name IP_TOOL_VERSION "13.1"
+set_global_assignment -entity "PLL1_altpll_0" -library "PLL1" -name IP_TOOL_ENV "Qsys"
