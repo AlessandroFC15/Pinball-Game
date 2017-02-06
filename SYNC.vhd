@@ -22,7 +22,7 @@ ARCHITECTURE MAIN OF SYNC IS
 	SIGNAL HBOLA : INTEGER RANGE 0 TO 1688 := 0;
 	SIGNAL VBOLA : INTEGER RANGE 0 TO 1066 := 0;
 	SIGNAL DY : INTEGER RANGE -15 TO 15 := 10;
-	SIGNAL DX : INTEGER RANGE -10 TO 10 := 5;
+	SIGNAL DX : INTEGER RANGE -10 TO 10 := 10;
 
 	SIGNAL HBARRA : INTEGER RANGE 0 TO 1688 := 0;
 	SIGNAL VBARRA : INTEGER RANGE 0 TO 1066 := 0;
@@ -31,13 +31,17 @@ ARCHITECTURE MAIN OF SYNC IS
 	SIGNAL RGB_BARRA : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
 	SIGNAL POINTS : INTEGER RANGE 0 TO 100 := 0;
+	SIGNAL TAMANHO_HORIZONTAL : INTEGER RANGE 0 TO 100 := 30;
+	SIGNAL TAMANHO_VERTICAL : INTEGER RANGE 0 TO 200 := 150;
+	SIGNAL NUM_VEZES_TOQUE_BARRA : INTEGER RANGE 0 TO 2000 := 0;
 
 BEGIN
 SQ( HBOLA, VBOLA, X_BOLA, Y_BOLA, RGB, DRAWBOLA);
-BARRA(HBARRA, VBARRA, X_BARRA, Y_BARRA, RGB_BARRA, DRAWBARRA);
+BARRA(HBARRA, VBARRA, X_BARRA, Y_BARRA, TAMANHO_HORIZONTAL, TAMANHO_VERTICAL, RGB_BARRA, DRAWBARRA);
 PROCESS (CLK)
 BEGIN
-	IF( CLK'EVENT AND CLK='1' ) THEN
+
+	IF( CLK'EVENT AND CLK='1') THEN
 		-- Desenha um quadrado no meio da tela representando a BOLA do jogo
 		IF( DRAWBOLA = '1') THEN
 			R <= RGB;
@@ -60,6 +64,96 @@ BEGIN
 			G <= RGB_BARRA;
 			B <= RGB_BARRA;
 		END IF;
+		
+		IF (POINTS = 0) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '0';
+				LED(5) <= '0';
+				LED(6) <= '1';
+			ELSIF (POINTS = 1) THEN
+				LED(0) <= '1';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '1';
+				LED(4) <= '1';
+				LED(5) <= '1';
+				LED(6) <= '1';
+			ELSIF (POINTS = 2) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '1';
+				LED(3) <= '0';
+				LED(4) <= '0';
+				LED(5) <= '1';
+				LED(6) <= '0';
+			ELSIF (POINTS = 3) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '1';
+				LED(5) <= '1';
+				LED(6) <= '0';
+			ELSIF (POINTS = 4) THEN
+				LED(0) <= '1';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '1';
+				LED(4) <= '1';
+				LED(5) <= '0';
+				LED(6) <= '0';
+			ELSIF (POINTS = 5) THEN
+				LED(0) <= '0';
+				LED(1) <= '1';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '1';
+				LED(5) <= '0';
+				LED(6) <= '0';
+			ELSIF (POINTS = 6) THEN
+				LED(0) <= '0';
+				LED(1) <= '1';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '0';
+				LED(5) <= '0';
+				LED(6) <= '0';
+			ELSIF (POINTS = 7) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '1';
+				LED(4) <= '1';
+				LED(5) <= '1';
+				LED(6) <= '1';
+			ELSIF (POINTS = 8) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '0';
+				LED(5) <= '0';
+				LED(6) <= '0';
+			ELSIF (POINTS = 9) THEN
+				LED(0) <= '0';
+				LED(1) <= '0';
+				LED(2) <= '0';
+				LED(3) <= '0';
+				LED(4) <= '1';
+				LED(5) <= '0';
+				LED(6) <= '0';
+			ELSE
+				LED(0) <= '1';
+				LED(1) <= '1';
+				LED(2) <= '1';
+				LED(3) <= '1';
+				LED(4) <= '1';
+				LED(5) <= '1';
+				LED(6) <= '1';
+			END IF;
 
 		-- Controla a BOLA
 		IF( HBOLA < 1688 ) THEN
@@ -72,12 +166,33 @@ BEGIN
 			ELSE
 				IF( Y_BOLA > (1066-50) ) THEN
 					DY <= -10;
+					
+					Y_BOLA <= Y_BOLA + DY;
+					X_BOLA <= X_BOLA + DX;
+					
 				ELSIF(Y_BOLA < 50) THEN
 					DY <= 10;
+					
+					Y_BOLA <= Y_BOLA + DY;
+					X_BOLA <= X_BOLA + DX;
 				ELSIF (X_BOLA > 1638) THEN
 					DX <= -10;
+					
+					Y_BOLA <= Y_BOLA + DY;
+					X_BOLA <= X_BOLA + DX;
 				ELSIF (X_BOLA < 400 + 40 AND Y_BOLA >= Y_BARRA AND Y_BOLA <= Y_BARRA + 200) THEN
 					DX <= 10;
+					
+					Y_BOLA <= Y_BOLA + DY;
+					X_BOLA <= X_BOLA + DX;
+					
+					TAMANHO_VERTICAL <= TAMANHO_VERTICAL - 7;
+					
+					IF( DRAWBARRA='1' ) THEN
+						R <= RGB_BARRA;
+						G <= RGB_BARRA;
+						B <= RGB_BARRA;
+					END IF;
 				ELSIF (X_BOLA < 400) THEN
 					DX <= 10;
 					POINTS <= POINTS + 1;
@@ -162,19 +277,30 @@ BEGIN
 						LED(4) <= '1';
 						LED(5) <= '0';
 						LED(6) <= '0';
+						POINTS <= 0;
 					ELSE
-						LED(0) <= '1';
-						LED(1) <= '1';
-						LED(2) <= '1';
-						LED(3) <= '1';
-						LED(4) <= '1';
-						LED(5) <= '1';
+					
+						LED(0) <= '0';
+						LED(1) <= '0';
+						LED(2) <= '0';
+						LED(3) <= '0';
+						LED(4) <= '0';
+						LED(5) <= '0';
 						LED(6) <= '1';
+						
+						POINTS <= 0;
 					END IF;
+					
+					Y_BOLA <= 550 + DY;
+					X_BOLA <= 1000 + DX; 
+					
+				ELSE
+					Y_BOLA <= Y_BOLA + DY;
+					X_BOLA <= X_BOLA + DX;
+					
 				END IF;
 				
-				Y_BOLA <= Y_BOLA + DY;
-				X_BOLA <= X_BOLA + DX;
+
 				VBOLA <= 0;
 			END IF;
 		END IF;
